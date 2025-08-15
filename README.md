@@ -67,15 +67,6 @@ pip install google-generativeai chromadb sentence-transformers
 ```bash
 export GEMINI_API_KEY=your_google_generative_ai_key
 
-### 📌 On Windows, use:
-```bash
-set GEMINI_API_KEY=your_google_generative_ai_key
-
-### 3️⃣ Run the Workflow
-```bash
-
-python main.py
-
 🧾 Example Output
 --- Step 1: Scraping content from the web ---
 Successfully scraped and read the original chapter text.
@@ -91,13 +82,12 @@ AI Reviewer Feedback:
 --- Step 4: Human-in-the-Loop review ---
 Please provide your edits or 'approve':
 
-### 📌 Notes
+
+📌 Notes
 
 Make sure you have a valid Google Gemini API Key.
 
 Internet connection is required for web scraping and API calls.
 
 ChromaDB stores all versions locally for quick retrieval.
-
-
 
