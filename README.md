@@ -57,37 +57,56 @@ The project leverages:
 
 ---
 
-## 🧪 Running the Project
+### 📋 Prerequisites
 
-### 1️⃣ Install Requirements
-```bash
-pip install google-generativeai chromadb sentence-transformers
+Before you begin, ensure you have the following:
 
-### 2️⃣ Set Your Gemini API Key
-```bash
-export GEMINI_API_KEY=your_google_generative_ai_key
+* **Python 3.x** installed.
+* **Internet Connection:** Required for web scraping and making API calls to the AI model.
+* **Google Gemini API Key:** You'll need a valid API key to interact with the Google Gemini model.
+    * `let apiKey = "" // If you want to use models other than gemini-2.5-flash-preview-05-20 or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.` - Ensure this line in your code uses your actual API key or the mechanism provided by Canvas for runtime injection.
 
-🧾 Example Output
---- Step 1: Scraping content from the web ---
-Successfully scraped and read the original chapter text.
+### ⚙️ Installation
 
---- Step 2: Initializing ChromaDB for versioning ---
-Original chapter version stored in ChromaDB.
+1.  **Clone the repository:**
+    ```bash
+    git clone [your_repository_url_here]
+    cd [your_repository_name]
+    ```
+2.  **Install dependencies:**
+    This project will likely require libraries for web scraping (e.g., `BeautifulSoup4`, `requests`), AI interaction (e.g., `google-generativeai` or `requests` for direct API calls), and ChromaDB.
+    ```bash
+    pip install beautifulsoup4 requests chromadb python-dotenv  # Add other necessary libraries here
+    ```
+3.  **Set up your API Key:**
+    It's recommended to use environment variables for your API key. Create a `.env` file in the root of your project:
+    ```
+    GOOGLE_GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY"
+    ```
+    Then, load it in your Python code using `os.getenv('GOOGLE_GEMINI_API_KEY')`.
 
---- Step 3: AI writing and review cycle ---
-AI draft 1 created and stored.
-AI Reviewer Feedback:
---- The rewritten text flows better but loses some original context in paragraph 2. Consider restoring the metaphors. ---
+---
 
---- Step 4: Human-in-the-Loop review ---
-Please provide your edits or 'approve':
+## 💡 Usage
+
+The system operates through a sequential workflow:
+
+1.  **Scraping Content:** The process begins by scraping content from a specified web source.
+2.  **Versioning Original:** The scraped original content is immediately stored as the first version in ChromaDB.
+3.  **AI Drafting:** The AI generates an initial draft based on the original content. This draft is also stored in ChromaDB.
+4.  **AI Review Cycle:** An AI reviewer provides feedback on the draft, aiming to refine the content. Subsequent drafts and their feedback are versioned.
+5.  **Human-in-the-Loop Review:** A prompt for human intervention allows a user to review the AI-generated content and AI feedback.
+6.  **Edits and Approval:** The human can then make necessary edits to restore context, improve flow, or apply specific nuances, finally approving the content.
+
+The system ensures that every iteration and change is logged and retrievable, providing a complete history of content evolution.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have suggestions for improvements, new features, or bug fixes, please open an issue or submit a pull request.
+
+---
 
 
-📌 Notes
-
-Make sure you have a valid Google Gemini API Key.
-
-Internet connection is required for web scraping and API calls.
-
-ChromaDB stores all versions locally for quick retrieval.
 
