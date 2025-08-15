@@ -1,92 +1,82 @@
-📚 Automated Book Publication Workflow
+# 📚 Automated Book Publication Workflow
 
-LLM-powered pipeline that simulates a modern book-publishing flow—from web scraping chapters to AI rewriting, AI review, human approval, and versioned storage for publication.
+## 🚀 Project Overview
+This project is an **LLM-powered automated workflow** that simulates the book publishing pipeline — from web scraping chapters to AI-assisted rewriting, reviewing, versioning, and storing final drafts for publication.
 
-Stack: Python 3.10+, Google Gemini (Generative AI), ChromaDB, SentenceTransformer, AsyncIO
+The system orchestrates a pipeline where:
+1. A chapter is scraped from an online source.
+2. An AI writer rewrites the chapter creatively.
+3. An AI reviewer critiques the AI-generated draft.
+4. A human (optionally) edits or approves the AI version.
+5. All versions are stored with metadata in **ChromaDB** for future access and tracking.
 
-🚀 Features
+The project leverages:
+- **Google's Gemini API** for content generation and review.
+- **ChromaDB** for persistent versioning and semantic search.
 
-Web Scraping: Fetch chapter content from a URL (e.g., Wikisource) or use local files
+---
 
-AI Writing Agent: Creative rewrites via Gemini with configurable prompts
+## 🧠 Key Features
+- ✅ **Web Scraping** – Automatically scrapes chapter content from a given URL.
+- ✍️ **AI Writing Agent** – Rewrites the scraped content using LLMs (e.g., Gemini).
+- 🧐 **AI Reviewing Agent** – Provides editorial feedback comparing the original and AI-rewritten version.
+- 🧑‍💻 **Human-in-the-Loop** – Allows manual approval or editing of AI-generated drafts.
+- 📦 **Version Control** – All versions (original, AI drafts, human edits) are stored in ChromaDB with semantic search support.
 
-AI Reviewing Agent: Compares original vs. AI rewrite and gives structured feedback
+---
 
-Human-in-the-Loop: Approve or edit drafts before finalization
+## 🔧 Technologies Used
+- **Python 3.10+**
+- **Google Generative AI (Gemini)**
+- **ChromaDB** for local semantic versioning
+- **SentenceTransformer** embeddings
+- **AsyncIO** for orchestration
 
-Version Control: Store original, AI drafts, human edits in ChromaDB with metadata + semantic search
+---
 
-Reproducibility: Saves prompt history, run logs, and outputs
+## 🛠️ How It Works
 
-🗂️ Project Structure
+### 1. Scrape Chapter
+- A chapter is downloaded from **Wikisource**.
+- Stored in a local text file inside the `data/` folder.
 
-project/
-├─ main.py                     # Orchestrates the full workflow
-├─ prompts/
-│  ├─ extraction_prompt.txt    # Content extraction / structuring
-│  └─ review_prompt.txt        # Editorial review prompt
-├─ utils/
-│  ├─ pdf_parser.py
-│  ├─ web_scraper.py
-│  ├─ ai_writer.py             # Gemini interface (writer)
-│  ├─ ai_reviewer.py           # Gemini interface (reviewer)
-│  ├─ store.py                 # ChromaDB + embeddings
-│  └─ io_helpers.py
-├─ data/
-│  ├─ downloaded/              # Raw scraped files
-│  ├─ outputs/
-│  │  ├─ drafts/               # AI + human drafts
-│  │  ├─ final/                # Final approved drafts
-│  │  └─ docs/                 # Prompt history, summaries
-│  └─ chroma/                  # Persistent vector store
-└─ README.md
+### 2. Initialize ChromaDB
+- Local persistent vector store setup using **SentenceTransformer** embeddings.
 
-⚙️ Setup
-1) Install requirements
-pip install google-generativeai chromadb sentence-transformers requests beautifulsoup4 python-dotenv
+### 3. AI Writing
+- The **writer agent** (`AIWriter`) rewrites the original text using a creative prompt.
 
-2) Configure environment
-3) 
-Create .env in project root:
-GEMINI_API_KEY=your_google_generative_ai_key
-MODEL_NAME=gemini-1.5-pro
-EMBED_MODEL=all-MiniLM-L6-v2
-CHROMA_DIR=./data/chroma
+### 4. AI Review
+- The **reviewer agent** (`AIReviewer`) evaluates the AI rewrite and provides structured feedback.
 
-▶️ Usage
-A) Scrape + Process a chapter from the web
-python main.py \
-  --source web \
-  --url "https://wikisource.org/your-chapter-url" \
-  --title "Chapter 01 - Beginnings"
+### 5. Human Review
+- A human can either approve the AI-generated draft or provide their own edited version.
 
-B) Use a local text/PDF file
-python main.py \
-  --source file \
-  --path "./data/downloaded/chapter01.txt" \
-  --title "Chapter 01 - Beginnings"
+### 6. Final Storage
+- The final approved or edited version is stored as `final_draft` in ChromaDB.
 
-C) Workflow steps (automated):
+---
 
-Scrape/Load original text → save to data/downloaded/
+## 🧪 Running the Project
 
-Initialize ChromaDB (persistent vector store)
+### 1️⃣ Install Requirements
+```bash
+pip install google-generativeai chromadb sentence-transformers
 
-AI Writer generates Draft v1
+### 2️⃣ Set Your Gemini API Key
+```bash
+export GEMINI_API_KEY=your_google_generative_ai_key
 
-AI Reviewer produces editorial feedback
+### 📌 On Windows, use:
+```bash
+set GEMINI_API_KEY=your_google_generative_ai_key
 
-Human Review: approve or provide edits (CLI prompt)
+### 3️⃣ Run the Workflow
+```bash
 
-Final Storage: store final_draft + metadata in ChromaDB and data/outputs/final/
+python main.py
 
-🧠 Prompts
-
-prompts/extraction_prompt.txt – guides structure (headings, summaries, key terms)
-
-prompts/review_prompt.txt – instructs reviewer to compare fidelity, tone, clarity, and suggest edits
-
-🧾 Example Console Output
+🧾 Example Output
 --- Step 1: Scraping content from the web ---
 Successfully scraped and read the original chapter text.
 
@@ -95,38 +85,19 @@ Original chapter version stored in ChromaDB.
 
 --- Step 3: AI writing and review cycle ---
 AI draft 1 created and stored.
-
 AI Reviewer Feedback:
-"The rewritten text flows better but loses some original context in paragraph 2.
-Consider restoring the metaphors."
+--- The rewritten text flows better but loses some original context in paragraph 2. Consider restoring the metaphors. ---
 
 --- Step 4: Human-in-the-Loop review ---
 Please provide your edits or 'approve':
 
-🛠️ Troubleshooting
+### 📌 Notes
 
-Auth errors: verify GEMINI_API_KEY and network access
+Make sure you have a valid Google Gemini API Key.
 
-Empty scrape: check the URL and update selectors in web_scraper.py
+Internet connection is required for web scraping and API calls.
 
-Model errors: switch MODEL_NAME or reduce context length
+ChromaDB stores all versions locally for quick retrieval.
 
-Chroma issues: delete data/chroma/ to rebuild the store
 
-🗺️ Roadmap
 
-Multi-draft iteration with scoring
-
-YAML run manifests for full reproducibility
-
-Optional OCR (for scanned PDFs)
-
-Web UI (FastAPI + simple dashboard)
-
-🙏 Acknowledgments
-
-Google Gemini for generative capabilities
-
-ChromaDB for local vector storage
-
-SentenceTransformer for embeddings
